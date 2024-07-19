@@ -13,4 +13,7 @@
     <color name="colorOnSecondary">#000000</color>
     <color name="colorBackground">#ffffff</color>
     <color name="colorOnBackground">#000000</color>
+    <color name="textColorPrimary">#000000</color>
+    <color name="textColorSecondary">#99000000</color>
+    <color name="textColorTertiary">#66000000</color>
 </resources>

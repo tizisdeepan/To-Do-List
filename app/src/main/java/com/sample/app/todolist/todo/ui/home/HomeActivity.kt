@@ -1,9 +1,12 @@
 package com.sample.app.todolist.todo.ui.home
 
 import android.os.Bundle
+import android.util.Log
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.sample.app.todolist.databinding.ActivityHomeBinding
+import com.sample.app.todolist.todo.ui.create.CreateTodoFragment
 import com.sample.app.todolist.todo.ui.list.TodoListFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -20,7 +23,15 @@ class HomeActivity : AppCompatActivity() {
 
         supportFragmentManager.beginTransaction().apply {
             setReorderingAllowed(true)
-            add(binding.host.id, TodoListFragment.newInstance(), TodoListFragment.Companion::class.java.simpleName)
+            add(binding.parentHost.id, TodoListFragment.newInstance())
+        }.commit()
+    }
+
+    fun navigateToCreateTodoPage() {
+        supportFragmentManager.beginTransaction().apply {
+            setReorderingAllowed(true)
+            add(binding.childHost.id, CreateTodoFragment.newInstance(), CreateTodoFragment.Companion::class.java.simpleName)
+            addToBackStack(CreateTodoFragment.Companion::class.java.simpleName)
         }.commit()
     }
 }

@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">To Do</string>
     <string name="content_description_create_todo">Create a new ToDo item</string>
+    <string name="enter_the_title_for_your_task_here">Enter the title for your task here</string>
+    <string name="create_to_do_item">Create To Do Item</string>
+    <string name="to_do_list">To Do List</string>
 </resources>

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">To Do</string>
+    <string name="content_description_create_todo">Create a new ToDo item</string>
 </resources>

@@ -1,11 +1,10 @@
 package com.sample.app.todolist.todo.domain
 
-import com.sample.app.todolist.todo.data.ITaskDataSource
-import com.sample.app.todolist.todo.di.SQLiteDatabaseSource
+import com.sample.app.todolist.todo.data.repository.ITaskRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class CreateTestTasksUseCase @Inject constructor(@SQLiteDatabaseSource private val taskDataSource: ITaskDataSource) {
+class CreateTestTasksUseCase @Inject constructor(private val taskRepository: ITaskRepository) {
 
-    operator fun invoke(): Flow<Boolean> = taskDataSource.createTestTasks()
+    operator fun invoke(): Flow<Boolean> = taskRepository.createTestTasks()
 }

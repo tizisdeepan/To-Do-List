@@ -54,15 +54,15 @@ class HomeActivity : AppCompatActivity() {
                     }
                     if (state.areEntriesAdded.consume() == true || state.areEntriesCleared.consume() == true) {
                         pleaseWaitDialog.dismiss()
-                        refreshTodoList()
+                        updateTaskList()
                     }
                 }
             }
         }
     }
 
-    fun refreshTodoList() {
-        (supportFragmentManager.fragments.firstOrNull { it is TaskListFragment } as? TaskListFragment)?.refreshPage()
+    fun updateTaskList() {
+        (supportFragmentManager.fragments.firstOrNull { it is TaskListFragment } as? TaskListFragment)?.updatePage()
     }
 
     fun navigateToCreateTaskPage() {
@@ -73,7 +73,7 @@ class HomeActivity : AppCompatActivity() {
         }.commit()
     }
 
-    fun navigateToTaskDetailsPage(id: Long) {
+    fun navigateToTaskDetailsPage(id: Int) {
         supportFragmentManager.beginTransaction().apply {
             setReorderingAllowed(true)
             add(binding.childHost.id, TaskDetailsFragment.newInstance(id), TaskDetailsFragment.Companion::class.java.simpleName)

@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.sample.app.todolist.R
 import com.sample.app.todolist.databinding.FragmentTaskDetailsBinding
 import com.sample.app.todolist.todo.common.toPrettyDate
 import com.sample.app.todolist.todo.ui.home.HomeActivity
@@ -30,6 +32,8 @@ class TaskDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setNavigation()
+
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 viewModel.uiState.collectLatest { state ->
@@ -39,8 +43,13 @@ class TaskDetailsFragment : Fragment() {
                         binding.completed.isChecked = state.task.completed
                     }
 
-                    if (state.isDeleted.consume() == true) {
+                    state.isDeleted.consume()?.let {
+                        (activity as? HomeActivity)?.updateTaskList()
                         (activity as? HomeActivity)?.onBackPressedDispatcher?.onBackPressed()
+                    }
+
+                    state.isUpdated.consume()?.let {
+                        (activity as? HomeActivity)?.updateTaskList()
                     }
                 }
             }
@@ -49,13 +58,24 @@ class TaskDetailsFragment : Fragment() {
         binding.delete.setOnClickListener {
             viewModel.deleteTodoItem()
         }
+
+        binding.completed.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.updateTask(isChecked)
+        }
+    }
+
+    private fun setNavigation() {
+        binding.toolbar.navigationIcon = ResourcesCompat.getDrawable(resources, R.drawable.baseline_arrow_back_24, requireContext().theme)
+        binding.toolbar.setNavigationOnClickListener {
+            activity?.onBackPressedDispatcher?.onBackPressed()
+        }
     }
 
     companion object {
         @JvmStatic
-        fun newInstance(id: Long): TaskDetailsFragment = TaskDetailsFragment().apply {
+        fun newInstance(id: Int): TaskDetailsFragment = TaskDetailsFragment().apply {
             arguments = Bundle().apply {
-                putLong("ID", id)
+                putInt("ID", id)
             }
         }
     }

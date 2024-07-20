@@ -34,9 +34,10 @@ class CreateTaskFragment : Fragment() {
         setNavigation()
 
         viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.CREATED) {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collectLatest {
                     if (it.isCreated) {
+                        (activity as? HomeActivity)?.updateTaskList()
                         (activity as? HomeActivity)?.onBackPressedDispatcher?.onBackPressed()
                     }
                 }
@@ -46,14 +47,7 @@ class CreateTaskFragment : Fragment() {
         binding.create.setOnClickListener {
             val title = binding.title.text?.toString()
             if (!title.isNullOrEmpty()) {
-                viewLifecycleOwner.lifecycleScope.launch {
-                    viewModel.createTask(title).collectLatest {
-                        if (it.isCreated) {
-                            (activity as? HomeActivity)?.refreshTodoList()
-                            (activity as? HomeActivity)?.onBackPressedDispatcher?.onBackPressed()
-                        }
-                    }
-                }
+                viewModel.createTask(title)
             }
         }
     }

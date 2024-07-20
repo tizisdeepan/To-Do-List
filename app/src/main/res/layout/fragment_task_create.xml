@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:title="@string/create_to_do_item" />
+        app:title="@string/create_task" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/titleTextInputLayout"

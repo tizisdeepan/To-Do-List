@@ -2,7 +2,9 @@ package com.sample.app.todolist.todo.di
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
-import com.sample.app.todolist.todo.data.database.TaskReaderDbHelper
+import androidx.room.Room
+import com.sample.app.todolist.todo.data.database.room.TaskDatabase
+import com.sample.app.todolist.todo.data.database.sqlite.TaskReaderDbHelper
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,5 +20,11 @@ class DatabaseModule {
     @Singleton
     fun provideTasksDatabase(@ApplicationContext appContext: Context): SQLiteDatabase {
         return TaskReaderDbHelper(appContext).writableDatabase
+    }
+
+    @Provides
+    @Singleton
+    fun provideTasksRoomDatabase(@ApplicationContext appContext: Context): TaskDatabase {
+        return Room.databaseBuilder(appContext, TaskDatabase::class.java, "tasks_database").fallbackToDestructiveMigration().build()
     }
 }

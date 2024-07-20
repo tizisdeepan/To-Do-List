@@ -1,10 +1,9 @@
 package com.sample.app.todolist.todo.domain
 
-import com.sample.app.todolist.todo.data.ITaskDataSource
-import com.sample.app.todolist.todo.di.SQLiteDatabaseSource
+import com.sample.app.todolist.todo.data.repository.ITaskRepository
 import javax.inject.Inject
 
-class FetchTaskUseCase @Inject constructor(@SQLiteDatabaseSource private val taskDataSource: ITaskDataSource) {
+class FetchTaskUseCase @Inject constructor(private val taskRepository: ITaskRepository) {
 
-    operator fun invoke(id: Long) = taskDataSource.fetchTask(id)
+    operator fun invoke(id: Int) = taskRepository.fetchTask(id)
 }

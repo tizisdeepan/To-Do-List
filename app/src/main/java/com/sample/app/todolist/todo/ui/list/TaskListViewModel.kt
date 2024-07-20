@@ -3,12 +3,10 @@ package com.sample.app.todolist.todo.ui.list
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import com.sample.app.todolist.todo.common.SingleEvent
 import com.sample.app.todolist.todo.data.model.Task
 import com.sample.app.todolist.todo.domain.FetchTasksUseCase
 import com.sample.app.todolist.todo.domain.UpdateTaskUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -23,22 +21,25 @@ class TaskListViewModel @Inject constructor(private val fetchTasksUseCase: Fetch
     private val _uiState: MutableStateFlow<TaskListUiState> = MutableStateFlow(TaskListUiState())
     val uiState: StateFlow<TaskListUiState> = _uiState.asStateFlow()
 
-    fun fetchTodoItems() {
-        viewModelScope.launch(Dispatchers.IO) {
+    private val _updateTask: MutableStateFlow<Task?> = MutableStateFlow(null)
+    val updateTask: StateFlow<Task?> = _updateTask.asStateFlow()
+
+    fun fetchTasks() {
+        viewModelScope.launch {
             fetchTasksUseCase().flow.cachedIn(viewModelScope).collectLatest { todoList ->
-                _uiState.update { state ->
-                    state.copy(isLoading = false, taskList = todoList)
+                _uiState.update {
+                    it.copy(isLoading = false, taskList = todoList)
                 }
             }
         }
     }
 
-    fun updateTodoItem(task: Task) {
-        viewModelScope.launch(Dispatchers.IO) {
+    fun updateTask(task: Task) {
+        viewModelScope.launch {
             updateTaskUseCase(task).collectLatest { isSuccessful ->
                 if (isSuccessful) {
-                    _uiState.update { state ->
-                        state.copy(isLoading = false, updatedTaskItem = SingleEvent(task))
+                    _updateTask.update {
+                        task.copy()
                     }
                 }
             }

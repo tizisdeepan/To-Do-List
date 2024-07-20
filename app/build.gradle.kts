@@ -47,8 +47,8 @@ android {
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:1.13.1")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.3")
+    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
@@ -58,14 +58,20 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview:1.4.0-alpha01")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     implementation("androidx.paging:paging-runtime-ktx:3.2.1")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.3")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.3")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.3")
-    implementation("androidx.activity:activity-ktx:1.9.0")
-    implementation("androidx.fragment:fragment-ktx:1.8.1")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+    implementation("androidx.activity:activity-ktx:1.7.2")
+    implementation("androidx.fragment:fragment-ktx:1.6.1")
 
     //Hilt
     implementation("com.google.dagger:hilt-android:2.48")
     kapt("androidx.hilt:hilt-compiler:1.2.0")
     kapt("com.google.dagger:hilt-compiler:2.48")
+
+    //Room
+    implementation("androidx.room:room-runtime:2.6.0-rc01")
+    implementation("androidx.room:room-ktx:2.6.0-rc01")
+    implementation("androidx.room:room-paging:2.6.0-rc01")
+    kapt("androidx.room:room-compiler:2.6.0-rc01")
 }

@@ -25,7 +25,7 @@ class TaskListAdapter(private val taskActionsContract: TaskActionsContract) : Pa
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun updateItems(mapper: (Task) -> Task) {
+    fun updateItems(mapper: (Task) -> Task?) {
         snapshot().map { data ->
             if (data != null) mapper(data)
             else null

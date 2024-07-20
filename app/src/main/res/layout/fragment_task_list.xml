@@ -1,15 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground">
 
+    <RelativeLayout
+        android:id="@+id/configuration"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="@color/colorSecondary"
+        android:paddingHorizontal="15dp"
+        android:paddingVertical="5dp">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:text="@string/use_room_for_caching"
+            android:textColor="@color/textColorPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/configurationSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true" />
+
+    </RelativeLayout>
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/refresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/configuration">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/taskList"
@@ -19,14 +49,34 @@
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+    <com.google.android.material.chip.Chip
+        android:id="@+id/goToTop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/configuration"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:text="@string/go_to_top"
+        android:textColor="@color/colorBackground"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:chipBackgroundColor="@color/colorPrimary"
+        app:chipCornerRadius="20dp"
+        app:chipIcon="@drawable/baseline_keyboard_arrow_up_24"
+        app:chipIconTint="@color/colorBackground"
+        app:chipStrokeColor="@color/colorOnBackground"
+        app:chipStrokeWidth="1.5dp"
+        tools:visibility="visible" />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/create"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
         android:layout_margin="20dp"
         android:contentDescription="@string/content_description_create_task"
-        android:src="@drawable/baseline_add_24"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:src="@drawable/baseline_add_24" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

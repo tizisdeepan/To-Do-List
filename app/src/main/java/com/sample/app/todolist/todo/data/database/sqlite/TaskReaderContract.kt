@@ -1,4 +1,4 @@
-package com.sample.app.todolist.todo.data.database
+package com.sample.app.todolist.todo.data.database.sqlite
 
 import android.provider.BaseColumns
 

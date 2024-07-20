@@ -1,6 +1,8 @@
 package com.sample.app.todolist.todo.ui.list
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,12 +12,14 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.sample.app.todolist.databinding.FragmentTaskListBinding
 import com.sample.app.todolist.todo.data.model.Task
+import com.sample.app.todolist.todo.data.repository.CurrentCacheStrategy
+import com.sample.app.todolist.todo.data.repository.DatabaseStrategy
 import com.sample.app.todolist.todo.ui.home.HomeActivity
 import com.sample.app.todolist.todo.ui.list.adapter.TaskListAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -39,26 +43,26 @@ class TaskListFragment : Fragment(), TaskActionsContract {
         binding.taskList.itemAnimator = null
 
         viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                viewModel.uiState.collectLatest {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect {
                     it.taskList?.let { pagingData ->
                         adapter.submitData(pagingData)
-                    }
-
-                    it.updatedTaskItem.consume()?.let { updatedTodoItem ->
-                        adapter.updateItems { todo ->
-                            if (todo.id == updatedTodoItem.id) {
-                                updatedTodoItem
-                            } else todo
-                        }
                     }
                 }
             }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                viewModel.fetchTodoItems()
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.updateTask.collect {
+                    updatePage()
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.fetchTasks()
             }
         }
 
@@ -67,17 +71,47 @@ class TaskListFragment : Fragment(), TaskActionsContract {
         }
 
         binding.refresh.setOnRefreshListener {
-            refreshPage()
+            updatePage()
+        }
+
+        binding.configurationSwitch.isChecked = CurrentCacheStrategy.strategy == DatabaseStrategy.ROOM
+
+        binding.configuration.setOnClickListener {
+            binding.configurationSwitch.isChecked = !binding.configurationSwitch.isChecked
+        }
+
+        binding.configurationSwitch.setOnCheckedChangeListener { _, isChecked ->
+            CurrentCacheStrategy.strategy = if (isChecked) DatabaseStrategy.ROOM else DatabaseStrategy.SQLITE
+            Handler(Looper.getMainLooper()).postDelayed({
+                adapter.refresh()
+            }, 200)
+        }
+
+        binding.taskList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                (binding.taskList.layoutManager as? LinearLayoutManager)?.findFirstVisibleItemPosition()?.let {
+                    if (it != 0) {
+                        binding.goToTop.visibility = View.VISIBLE
+                    } else {
+                        binding.goToTop.visibility = View.GONE
+                    }
+                    if (recyclerView.adapter?.itemCount == 0) binding.goToTop.visibility = View.GONE
+                }
+            }
+        })
+
+        binding.goToTop.setOnClickListener {
+            binding.taskList.smoothScrollToPosition(0)
         }
     }
 
-    fun refreshPage() {
+    fun updatePage() {
         adapter.refresh()
         if (binding.refresh.isRefreshing) binding.refresh.isRefreshing = false
     }
 
     override fun updateTask(task: Task) {
-        viewModel.updateTodoItem(task)
+        viewModel.updateTask(task)
     }
 
     override fun openTask(task: Task) {

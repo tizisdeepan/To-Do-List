@@ -90,7 +90,7 @@ class TaskListFragment : Fragment(), TaskActionsContract {
 
         binding.taskList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                (binding.taskList.layoutManager as? LinearLayoutManager)?.findFirstVisibleItemPosition()?.let {
+                (binding.taskList.layoutManager as? LinearLayoutManager)?.findFirstCompletelyVisibleItemPosition()?.let {
                     if (it != 0) {
                         binding.goToTop.visibility = View.VISIBLE
                     } else {

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/createEntries"
+        android:icon="@drawable/baseline_import_export_24"
+        android:title="@string/create_2000_entries"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/clearEntries"
+        android:icon="@drawable/baseline_delete_outline_24"
+        android:title="@string/clear_all_entries"
+        app:showAsAction="never" />
+
+</menu>

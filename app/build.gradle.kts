@@ -55,8 +55,9 @@ dependencies {
 
     //UI Packages
     implementation("com.google.android.material:material:1.12.0")
-    implementation("androidx.recyclerview:recyclerview:1.3.2")
-    implementation("androidx.paging:paging-runtime-ktx:3.3.0")
+    implementation("androidx.recyclerview:recyclerview:1.4.0-alpha01")
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+    implementation("androidx.paging:paging-runtime-ktx:3.2.1")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.3")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.3")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.3")

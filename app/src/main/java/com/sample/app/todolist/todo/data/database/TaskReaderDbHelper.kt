@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.provider.BaseColumns
 
-class TodoReaderDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
+class TaskReaderDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
     override fun onCreate(db: SQLiteDatabase?) {
         db?.execSQL(SQL_CREATE_ENTRIES)
     }
@@ -21,10 +21,10 @@ class TodoReaderDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
 
     companion object {
         const val DATABASE_VERSION = 1
-        const val DATABASE_NAME = "to_do_sqlite.db"
+        const val DATABASE_NAME = "tasks_database.db"
 
         //Queries
-        private const val SQL_CREATE_ENTRIES = "CREATE TABLE ${TodoReaderContract.TodoEntry.TABLE_NAME} (" + "${BaseColumns._ID} INTEGER PRIMARY KEY," + "${TodoReaderContract.TodoEntry.COLUMN_NAME_TITLE} TEXT," + "${TodoReaderContract.TodoEntry.COLUMN_COMPLETED} INTEGER," + "${TodoReaderContract.TodoEntry.COLUMN_CREATED_ON} LONG)"
-        private const val SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS ${TodoReaderContract.TodoEntry.TABLE_NAME}"
+        private const val SQL_CREATE_ENTRIES = "CREATE TABLE ${TaskReaderContract.TaskEntry.TABLE_NAME} (" + "${BaseColumns._ID} INTEGER PRIMARY KEY," + "${TaskReaderContract.TaskEntry.COLUMN_NAME_TITLE} TEXT," + "${TaskReaderContract.TaskEntry.COLUMN_COMPLETED} INTEGER," + "${TaskReaderContract.TaskEntry.COLUMN_CREATED_ON} LONG)"
+        private const val SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS ${TaskReaderContract.TaskEntry.TABLE_NAME}"
     }
 }

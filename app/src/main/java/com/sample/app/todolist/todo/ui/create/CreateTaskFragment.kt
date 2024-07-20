@@ -11,20 +11,20 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.sample.app.todolist.R
-import com.sample.app.todolist.databinding.FragmentTodoCreateBinding
+import com.sample.app.todolist.databinding.FragmentTaskCreateBinding
 import com.sample.app.todolist.todo.ui.home.HomeActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class CreateTodoFragment : Fragment() {
+class CreateTaskFragment : Fragment() {
 
-    private lateinit var binding: FragmentTodoCreateBinding
-    private val viewModel: CreateTodoViewModel by viewModels()
+    private lateinit var binding: FragmentTaskCreateBinding
+    private val viewModel: CreateTaskViewModel by viewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = FragmentTodoCreateBinding.inflate(inflater)
+        binding = FragmentTaskCreateBinding.inflate(inflater)
         return binding.root
     }
 
@@ -47,7 +47,7 @@ class CreateTodoFragment : Fragment() {
             val title = binding.title.text?.toString()
             if (!title.isNullOrEmpty()) {
                 viewLifecycleOwner.lifecycleScope.launch {
-                    viewModel.createTodoItem(title).collectLatest {
+                    viewModel.createTask(title).collectLatest {
                         if (it.isCreated) {
                             (activity as? HomeActivity)?.refreshTodoList()
                             (activity as? HomeActivity)?.onBackPressedDispatcher?.onBackPressed()
@@ -67,6 +67,6 @@ class CreateTodoFragment : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(): CreateTodoFragment = CreateTodoFragment()
+        fun newInstance(): CreateTaskFragment = CreateTaskFragment()
     }
 }

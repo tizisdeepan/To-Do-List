@@ -4,8 +4,8 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sample.app.todolist.todo.common.SingleEvent
-import com.sample.app.todolist.todo.domain.ClearAllEntriesUseCase
-import com.sample.app.todolist.todo.domain.CreateTestEntriesUseCase
+import com.sample.app.todolist.todo.domain.ClearAllTasksUseCase
+import com.sample.app.todolist.todo.domain.CreateTestTasksUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,14 +18,14 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val createTestEntriesUseCase: CreateTestEntriesUseCase, private val clearAllEntriesUseCase: ClearAllEntriesUseCase) : ViewModel() {
+class HomeViewModel @Inject constructor(private val createTestTasksUseCase: CreateTestTasksUseCase, private val clearAllTasksUseCase: ClearAllTasksUseCase) : ViewModel() {
 
     private val _uiState: MutableStateFlow<HomeUiState> = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
     fun createTestEntries() {
         viewModelScope.launch(Dispatchers.IO) {
-            createTestEntriesUseCase().onStart {
+            createTestTasksUseCase().onStart {
                 _uiState.update { state -> state.copy(isLoading = true) }
             }.collectLatest {
                 Log.e("ENTRIES", "ADDED 2000 ENTRIES")
@@ -36,7 +36,7 @@ class HomeViewModel @Inject constructor(private val createTestEntriesUseCase: Cr
 
     fun clearAllEntries() {
         viewModelScope.launch(Dispatchers.IO) {
-            clearAllEntriesUseCase().onStart {
+            clearAllTasksUseCase().onStart {
                 _uiState.update { state -> state.copy(isLoading = true) }
             }.collectLatest {
                 Log.e("ENTRIES", "CLEARED ALL ENTRIES")

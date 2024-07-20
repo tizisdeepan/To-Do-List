@@ -1,7 +1,7 @@
 package com.sample.app.todolist.todo.di
 
-import com.sample.app.todolist.todo.data.ITodoDataSource
-import com.sample.app.todolist.todo.data.TodoSQLiteDataSource
+import com.sample.app.todolist.todo.data.ITaskDataSource
+import com.sample.app.todolist.todo.data.TaskSQLiteDataSource
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -13,5 +13,5 @@ abstract class DataModule {
 
     @Binds
     @SQLiteDatabaseSource
-    abstract fun provideTodoSqliteDataSource(dataSource: TodoSQLiteDataSource): ITodoDataSource
+    abstract fun provideTaskSqliteDataSource(dataSource: TaskSQLiteDataSource): ITaskDataSource
 }

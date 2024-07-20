@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">To Do</string>
-    <string name="content_description_create_todo">Create a new ToDo item</string>
+    <string name="content_description_create_task">Create a new Task</string>
     <string name="enter_the_title_for_your_task_here">Enter the title for your task here</string>
     <string name="create_to_do_item">Create To Do Item</string>
-    <string name="to_do_list">To Do List</string>
+    <string name="task_list">Task List</string>
     <string name="create_2000_entries">Create 2000 items</string>
     <string name="clear_all_entries">Clear all items</string>
     <string name="please_wait">Please Wait</string>

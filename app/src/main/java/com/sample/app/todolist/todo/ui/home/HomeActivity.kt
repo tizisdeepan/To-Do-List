@@ -1,21 +1,16 @@
 package com.sample.app.todolist.todo.ui.home
 
-import android.app.ProgressDialog
 import android.os.Bundle
-import android.util.Log
-import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.sample.app.todolist.R
 import com.sample.app.todolist.databinding.ActivityHomeBinding
-import com.sample.app.todolist.todo.data.model.Todo
-import com.sample.app.todolist.todo.ui.create.CreateTodoFragment
-import com.sample.app.todolist.todo.ui.details.TodoDetailsFragment
-import com.sample.app.todolist.todo.ui.list.TodoListFragment
+import com.sample.app.todolist.todo.ui.create.CreateTaskFragment
+import com.sample.app.todolist.todo.ui.details.TaskDetailsFragment
+import com.sample.app.todolist.todo.ui.list.TaskListFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -35,7 +30,7 @@ class HomeActivity : AppCompatActivity() {
 
         supportFragmentManager.beginTransaction().apply {
             setReorderingAllowed(true)
-            add(binding.parentHost.id, TodoListFragment.newInstance())
+            add(binding.parentHost.id, TaskListFragment.newInstance())
         }.commit()
 
         binding.toolbar.setOnMenuItemClickListener { menuItem ->
@@ -67,22 +62,22 @@ class HomeActivity : AppCompatActivity() {
     }
 
     fun refreshTodoList() {
-        (supportFragmentManager.fragments.firstOrNull { it is TodoListFragment } as? TodoListFragment)?.refreshPage()
+        (supportFragmentManager.fragments.firstOrNull { it is TaskListFragment } as? TaskListFragment)?.refreshPage()
     }
 
-    fun navigateToCreateTodoPage() {
+    fun navigateToCreateTaskPage() {
         supportFragmentManager.beginTransaction().apply {
             setReorderingAllowed(true)
-            add(binding.childHost.id, CreateTodoFragment.newInstance(), CreateTodoFragment.Companion::class.java.simpleName)
-            addToBackStack(CreateTodoFragment.Companion::class.java.simpleName)
+            add(binding.childHost.id, CreateTaskFragment.newInstance(), CreateTaskFragment.Companion::class.java.simpleName)
+            addToBackStack(CreateTaskFragment.Companion::class.java.simpleName)
         }.commit()
     }
 
-    fun navigateToTodoDetailsPage(id: Long) {
+    fun navigateToTaskDetailsPage(id: Long) {
         supportFragmentManager.beginTransaction().apply {
             setReorderingAllowed(true)
-            add(binding.childHost.id, TodoDetailsFragment.newInstance(id), TodoDetailsFragment.Companion::class.java.simpleName)
-            addToBackStack(TodoDetailsFragment.Companion::class.java.simpleName)
+            add(binding.childHost.id, TaskDetailsFragment.newInstance(id), TaskDetailsFragment.Companion::class.java.simpleName)
+            addToBackStack(TaskDetailsFragment.Companion::class.java.simpleName)
         }.commit()
     }
 }

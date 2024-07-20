@@ -2,7 +2,7 @@ package com.sample.app.todolist.todo.di
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
-import com.sample.app.todolist.todo.data.database.TodoReaderDbHelper
+import com.sample.app.todolist.todo.data.database.TaskReaderDbHelper
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,7 +16,7 @@ class DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideDatabase(@ApplicationContext appContext: Context): SQLiteDatabase {
-        return TodoReaderDbHelper(appContext).writableDatabase
+    fun provideTasksDatabase(@ApplicationContext appContext: Context): SQLiteDatabase {
+        return TaskReaderDbHelper(appContext).writableDatabase
     }
 }

@@ -10,42 +10,42 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.sample.app.todolist.databinding.FragmentTodoListBinding
-import com.sample.app.todolist.todo.data.model.Todo
+import com.sample.app.todolist.databinding.FragmentTaskListBinding
+import com.sample.app.todolist.todo.data.model.Task
 import com.sample.app.todolist.todo.ui.home.HomeActivity
-import com.sample.app.todolist.todo.ui.list.adapter.TodoListAdapter
+import com.sample.app.todolist.todo.ui.list.adapter.TaskListAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class TodoListFragment : Fragment(), TodoActionsContract {
+class TaskListFragment : Fragment(), TaskActionsContract {
 
-    private lateinit var binding: FragmentTodoListBinding
-    private val viewModel: TodoListViewModel by viewModels()
+    private lateinit var binding: FragmentTaskListBinding
+    private val viewModel: TaskListViewModel by viewModels()
 
-    private val adapter: TodoListAdapter by lazy { TodoListAdapter(this) }
+    private val adapter: TaskListAdapter by lazy { TaskListAdapter(this) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = FragmentTodoListBinding.inflate(inflater)
+        binding = FragmentTaskListBinding.inflate(inflater)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.todoList.layoutManager = LinearLayoutManager(requireContext())
-        binding.todoList.adapter = adapter
-        binding.todoList.itemAnimator = null
+        binding.taskList.layoutManager = LinearLayoutManager(requireContext())
+        binding.taskList.adapter = adapter
+        binding.taskList.itemAnimator = null
 
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 viewModel.uiState.collectLatest {
-                    it.todoList?.let { pagingData ->
+                    it.taskList?.let { pagingData ->
                         adapter.submitData(pagingData)
                     }
 
-                    it.updatedTodoItem.consume()?.let { updatedTodoItem ->
+                    it.updatedTaskItem.consume()?.let { updatedTodoItem ->
                         adapter.updateItems { todo ->
                             if (todo.id == updatedTodoItem.id) {
                                 updatedTodoItem
@@ -63,7 +63,7 @@ class TodoListFragment : Fragment(), TodoActionsContract {
         }
 
         binding.create.setOnClickListener {
-            (activity as? HomeActivity)?.navigateToCreateTodoPage()
+            (activity as? HomeActivity)?.navigateToCreateTaskPage()
         }
 
         binding.refresh.setOnRefreshListener {
@@ -76,16 +76,16 @@ class TodoListFragment : Fragment(), TodoActionsContract {
         if (binding.refresh.isRefreshing) binding.refresh.isRefreshing = false
     }
 
-    override fun updateTodoItem(todo: Todo) {
-        viewModel.updateTodoItem(todo)
+    override fun updateTask(task: Task) {
+        viewModel.updateTodoItem(task)
     }
 
-    override fun openTodoItem(todo: Todo) {
-        (activity as? HomeActivity)?.navigateToTodoDetailsPage(todo.id)
+    override fun openTask(task: Task) {
+        (activity as? HomeActivity)?.navigateToTaskDetailsPage(task.id)
     }
 
     companion object {
         @JvmStatic
-        fun newInstance(): TodoListFragment = TodoListFragment()
+        fun newInstance(): TaskListFragment = TaskListFragment()
     }
 }

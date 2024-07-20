@@ -56,11 +56,13 @@ class TaskDetailsFragment : Fragment() {
         }
 
         binding.delete.setOnClickListener {
-            viewModel.deleteTodoItem()
+            viewModel.deleteTask()
         }
 
         binding.completed.setOnCheckedChangeListener { _, isChecked ->
-            viewModel.updateTask(isChecked)
+            with(viewModel.uiState.value) {
+                if (task != null) viewModel.updateTask(task, isChecked)
+            }
         }
     }
 

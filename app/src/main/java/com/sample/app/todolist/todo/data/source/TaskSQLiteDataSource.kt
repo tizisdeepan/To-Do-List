@@ -17,12 +17,16 @@ import javax.inject.Inject
 
 class TaskSQLiteDataSource @Inject constructor(private val db: SQLiteDatabase) : ITaskDataSource {
     override fun clearAllTasks(): Flow<Boolean> = flow {
-        db.delete(TaskReaderContract.TaskEntry.TABLE_NAME, null, null)
+        clearAllTasksInternal()
         emit(true)
     }.flowOn(Dispatchers.IO)
 
+    fun clearAllTasksInternal() {
+        db.delete(TaskReaderContract.TaskEntry.TABLE_NAME, null, null)
+    }
+
     override fun createTestTasks(): Flow<Boolean> = flow {
-        val count = DatabaseUtils.queryNumEntries(db, TaskReaderContract.TaskEntry.TABLE_NAME) + 1
+        val count = getCount() + 1
         for (i in count..(count + 1999)) {
             addTaskInternal(EnglishNumberToWords.convert(i))
         }
@@ -34,6 +38,10 @@ class TaskSQLiteDataSource @Inject constructor(private val db: SQLiteDatabase) :
     }
 
     override fun fetchTask(id: Int): Flow<Task?> = flow {
+        emit(fetchTaskInternal(id))
+    }.flowOn(Dispatchers.IO)
+
+    fun fetchTaskInternal(id: Int): Task? {
         val projection = arrayOf(BaseColumns._ID, TaskReaderContract.TaskEntry.COLUMN_NAME_TITLE, TaskReaderContract.TaskEntry.COLUMN_COMPLETED, TaskReaderContract.TaskEntry.COLUMN_CREATED_ON)
         val selection = "${BaseColumns._ID} = ?"
         val selectionArgs = arrayOf(id.toString())
@@ -51,8 +59,8 @@ class TaskSQLiteDataSource @Inject constructor(private val db: SQLiteDatabase) :
             }
         }
         cursor.close()
-        emit(task)
-    }.flowOn(Dispatchers.IO)
+        return task
+    }
 
     private fun fetchTasksInternal(from: Int, offset: Int): List<Task> {
         val projection = arrayOf(BaseColumns._ID, TaskReaderContract.TaskEntry.COLUMN_NAME_TITLE, TaskReaderContract.TaskEntry.COLUMN_COMPLETED, TaskReaderContract.TaskEntry.COLUMN_CREATED_ON)
@@ -78,11 +86,38 @@ class TaskSQLiteDataSource @Inject constructor(private val db: SQLiteDatabase) :
         return items
     }
 
+    fun fetchAllTasksInternal(): List<Task> {
+        val projection = arrayOf(BaseColumns._ID, TaskReaderContract.TaskEntry.COLUMN_NAME_TITLE, TaskReaderContract.TaskEntry.COLUMN_COMPLETED, TaskReaderContract.TaskEntry.COLUMN_CREATED_ON)
+        val selection = "${BaseColumns._ID} < ?"
+
+        val sortOrder = "${BaseColumns._ID} DESC"
+
+        val cursor = db.query(TaskReaderContract.TaskEntry.TABLE_NAME, projection, selection, null, null, null, sortOrder)
+
+        val items = mutableListOf<Task>()
+        with(cursor) {
+            while (moveToNext()) {
+                val id = getLong(getColumnIndexOrThrow(BaseColumns._ID))
+                val title = getString(getColumnIndexOrThrow(TaskReaderContract.TaskEntry.COLUMN_NAME_TITLE))
+                val completed = getInt(getColumnIndexOrThrow(TaskReaderContract.TaskEntry.COLUMN_COMPLETED))
+                val createdOn = getLong(getColumnIndexOrThrow(TaskReaderContract.TaskEntry.COLUMN_CREATED_ON))
+                items.add(Task(id = id.toInt(), title = title, completed = completed > 0, createdOn = createdOn))
+            }
+        }
+        cursor.close()
+
+        return items
+    }
+
+    fun getCount(): Long {
+        return DatabaseUtils.queryNumEntries(db, TaskReaderContract.TaskEntry.TABLE_NAME)
+    }
+
     override fun addTask(title: String) = flow {
         emit(addTaskInternal(title))
     }.flowOn(Dispatchers.IO)
 
-    private fun addTaskInternal(title: String): Boolean {
+    fun addTaskInternal(title: String): Boolean {
         val values = ContentValues().apply {
             put(TaskReaderContract.TaskEntry.COLUMN_NAME_TITLE, title)
             put(TaskReaderContract.TaskEntry.COLUMN_COMPLETED, false)
@@ -93,14 +128,33 @@ class TaskSQLiteDataSource @Inject constructor(private val db: SQLiteDatabase) :
         return newRowId != -1L
     }
 
+    fun addTaskInternal(task: Task): Boolean {
+        val values = ContentValues().apply {
+            put(BaseColumns._ID, task.id)
+            put(TaskReaderContract.TaskEntry.COLUMN_NAME_TITLE, task.title)
+            put(TaskReaderContract.TaskEntry.COLUMN_COMPLETED, task.completed)
+            put(TaskReaderContract.TaskEntry.COLUMN_CREATED_ON, task.createdOn)
+        }
+
+        val newRowId = db.insert(TaskReaderContract.TaskEntry.TABLE_NAME, null, values)
+        return newRowId != -1L
+    }
+
     override fun deleteTask(id: Int) = flow {
-        val selection = "${TaskReaderContract.TaskEntry.COLUMN_NAME_ID} = ?"
-        val selectionArgs = arrayOf(id.toString())
-        val deletedRows = db.delete(TaskReaderContract.TaskEntry.TABLE_NAME, selection, selectionArgs)
-        emit(deletedRows >= 0)
+        emit(deleteTaskInternal(id) >= 0)
     }.flowOn(Dispatchers.IO)
 
+    fun deleteTaskInternal(id: Int): Int {
+        val selection = "${TaskReaderContract.TaskEntry.COLUMN_NAME_ID} = ?"
+        val selectionArgs = arrayOf(id.toString())
+        return db.delete(TaskReaderContract.TaskEntry.TABLE_NAME, selection, selectionArgs)
+    }
+
     override fun updateTask(task: Task) = flow {
+        emit(updateTaskInternal(task) >= 0)
+    }.flowOn(Dispatchers.IO)
+
+    fun updateTaskInternal(task: Task): Int {
         val values = ContentValues().apply {
             put(TaskReaderContract.TaskEntry.COLUMN_NAME_TITLE, task.title)
             put(TaskReaderContract.TaskEntry.COLUMN_COMPLETED, task.completed)
@@ -108,8 +162,6 @@ class TaskSQLiteDataSource @Inject constructor(private val db: SQLiteDatabase) :
 
         val selection = "${TaskReaderContract.TaskEntry.COLUMN_NAME_ID} = ?"
         val selectionArgs = arrayOf(task.id.toString())
-        val count = db.update(TaskReaderContract.TaskEntry.TABLE_NAME, values, selection, selectionArgs)
-
-        emit(count >= 0)
-    }.flowOn(Dispatchers.IO)
+        return db.update(TaskReaderContract.TaskEntry.TABLE_NAME, values, selection, selectionArgs)
+    }
 }

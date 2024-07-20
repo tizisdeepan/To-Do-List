@@ -3,12 +3,13 @@ package com.sample.app.todolist.todo.ui.details
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sample.app.todolist.todo.common.DispatcherProvider
 import com.sample.app.todolist.todo.common.SingleEvent
+import com.sample.app.todolist.todo.data.model.Task
 import com.sample.app.todolist.todo.domain.DeleteTaskUseCase
 import com.sample.app.todolist.todo.domain.FetchTaskUseCase
 import com.sample.app.todolist.todo.domain.UpdateTaskUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,8 +19,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class TaskDetailsViewModel @Inject constructor(savedStateHandle: SavedStateHandle, private val fetchTaskUseCase: FetchTaskUseCase, private val updateTaskUseCase: UpdateTaskUseCase,
-                                               private val deleteTaskUseCase: DeleteTaskUseCase) : ViewModel() {
+class TaskDetailsViewModel @Inject constructor(savedStateHandle: SavedStateHandle, private val dispatcherProvider: DispatcherProvider, private val fetchTaskUseCase: FetchTaskUseCase,
+                                               private val updateTaskUseCase: UpdateTaskUseCase, private val deleteTaskUseCase: DeleteTaskUseCase) : ViewModel() {
 
     private val id: Int = savedStateHandle.get<Int>("ID") ?: -1
 
@@ -27,32 +28,28 @@ class TaskDetailsViewModel @Inject constructor(savedStateHandle: SavedStateHandl
     val uiState: StateFlow<TaskDetailsUiState> = _uiState.asStateFlow()
 
     init {
-        fetchTodo()
+        fetchTask()
     }
 
-    private fun fetchTodo() {
-        viewModelScope.launch(Dispatchers.IO) {
+    fun fetchTask() {
+        viewModelScope.launch(dispatcherProvider.io) {
             fetchTaskUseCase(id).collectLatest {
                 _uiState.update { state -> state.copy(task = it) }
             }
         }
     }
 
-    fun updateTask(completed: Boolean) {
-        with(_uiState.value) {
-            if (task != null) {
-                val updatedTask = task.copy(completed = completed)
-                viewModelScope.launch(Dispatchers.IO) {
-                    updateTaskUseCase(updatedTask).collectLatest {
-                        _uiState.update { state -> state.copy(task = updatedTask, isUpdated = SingleEvent(true)) }
-                    }
-                }
+    fun updateTask(task: Task, completed: Boolean) {
+        val updatedTask = task.copy(completed = completed)
+        viewModelScope.launch(dispatcherProvider.io) {
+            updateTaskUseCase(updatedTask).collectLatest {
+                _uiState.update { state -> state.copy(task = updatedTask, isUpdated = SingleEvent(true)) }
             }
         }
     }
 
-    fun deleteTodoItem() {
-        viewModelScope.launch(Dispatchers.IO) {
+    fun deleteTask() {
+        viewModelScope.launch(dispatcherProvider.io) {
             deleteTaskUseCase(id).collectLatest {
                 if (it) {
                     _uiState.update { state -> state.copy(isDeleted = SingleEvent(true)) }

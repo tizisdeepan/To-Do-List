@@ -19,6 +19,9 @@ abstract class TaskDao {
     @Query("SELECT * FROM Task ORDER BY id DESC")
     abstract fun getPaginatedTasks(): PagingSource<Int, Task>
 
+    @Query("SELECT * FROM Task ORDER BY id DESC")
+    abstract fun getAllTasks(): List<Task>
+
     @Query("SELECT COUNT(*) FROM Task")
     abstract fun getCount(): Int
 

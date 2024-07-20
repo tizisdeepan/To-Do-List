@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sample.app.todolist.databinding.FragmentTaskListBinding
@@ -62,7 +63,7 @@ class TaskListFragment : Fragment(), TaskActionsContract {
 
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.fetchTasks()
+                viewModel.fetchTasks(viewModel.viewModelScope)
             }
         }
 

@@ -8,7 +8,7 @@ import com.sample.app.todolist.todo.di.SQLiteDatabaseSource
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class TaskRepository @Inject constructor(@SQLiteDatabaseSource private val sqliteDatabase: ITaskDataSource, @RoomDatabaseSource private val roomDatabase: ITaskDataSource) : ITaskRepository {
+class TaskRepository @Inject constructor(@SQLiteDatabaseSource val sqliteDatabase: ITaskDataSource, @RoomDatabaseSource val roomDatabase: ITaskDataSource) : ITaskRepository {
     override fun clearAllTasks(): Flow<Boolean> {
         return when (CurrentCacheStrategy.strategy) {
             DatabaseStrategy.SQLITE -> {

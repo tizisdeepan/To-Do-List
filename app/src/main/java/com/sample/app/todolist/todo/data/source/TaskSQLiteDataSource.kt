@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 
-class TaskSQLiteDataSource @Inject constructor(private val db: SQLiteDatabase) : ITaskDataSource {
+class TaskSQLiteDataSource @Inject constructor(val db: SQLiteDatabase) : ITaskDataSource {
     override fun clearAllTasks(): Flow<Boolean> = flow {
         clearAllTasksInternal()
         emit(true)

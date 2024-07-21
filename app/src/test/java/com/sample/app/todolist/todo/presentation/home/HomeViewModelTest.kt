@@ -1,6 +1,9 @@
 package com.sample.app.todolist.todo.presentation.home
 
+import com.sample.app.todolist.todo.data.model.DatabasePerformance
+import com.sample.app.todolist.todo.data.model.Stat
 import com.sample.app.todolist.todo.data.repository.FakeTaskRepository
+import com.sample.app.todolist.todo.domain.CalculateDatabasePerformanceUseCase
 import com.sample.app.todolist.todo.domain.ClearAllTasksUseCase
 import com.sample.app.todolist.todo.domain.CreateTasksForTestingUseCase
 import com.sample.app.todolist.todo.util.MainDispatcherRule
@@ -17,6 +20,7 @@ class HomeViewModelTest {
     private val fakeTaskRepository = FakeTaskRepository()
     private val createTasksForTestingUseCase = CreateTasksForTestingUseCase(fakeTaskRepository)
     private val clearAllTasksUseCase = ClearAllTasksUseCase(fakeTaskRepository)
+    private val calculateDatabasePerformanceUseCase = CalculateDatabasePerformanceUseCase(fakeTaskRepository)
     private lateinit var viewModel: HomeViewModel
 
     @get:Rule
@@ -25,7 +29,7 @@ class HomeViewModelTest {
 
     @BeforeEach
     fun setUp() {
-        viewModel = HomeViewModel(rule.getDispatcherProvider(), createTasksForTestingUseCase, clearAllTasksUseCase)
+        viewModel = HomeViewModel(rule.getDispatcherProvider(), createTasksForTestingUseCase, clearAllTasksUseCase, calculateDatabasePerformanceUseCase)
     }
 
     @Test
@@ -40,5 +44,12 @@ class HomeViewModelTest {
         fakeTaskRepository.emitFlowClearAllTasksBoolean(true)
         viewModel.clearAllTasks()
         assert(viewModel.uiState.value.areEntriesCleared.consume() == true)
+    }
+
+    @Test
+    fun testCalculateDatabasePerformance() = runTest {
+        fakeTaskRepository.emitFlowCalculateDatabasePerformance(DatabasePerformance(room = Stat(10, 12, 1), sqlite = Stat(15, 17, 2)))
+        viewModel.calculateDatabasePerformance()
+        assert(viewModel.uiState.value.databasePerformance != null)
     }
 }

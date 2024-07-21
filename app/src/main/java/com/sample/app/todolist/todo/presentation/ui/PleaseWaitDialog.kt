@@ -10,7 +10,6 @@ import com.sample.app.todolist.R
 
 class PleaseWaitDialog(ctx: Context) : Dialog(ctx) {
 
-    var shouldShow = true
     override fun onStart() {
         super.onStart()
         window?.setLayout(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT)

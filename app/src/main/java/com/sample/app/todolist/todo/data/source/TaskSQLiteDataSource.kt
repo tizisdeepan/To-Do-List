@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 
-class TaskSQLiteDataSource @Inject constructor(private val db: SQLiteDatabase) : ITaskDataSource {
+class TaskSQLiteDataSource @Inject constructor(val db: SQLiteDatabase) : ITaskDataSource {
     override fun clearAllTasks(): Flow<Boolean> = flow {
         clearAllTasksInternal()
         emit(true)
@@ -85,11 +85,10 @@ class TaskSQLiteDataSource @Inject constructor(private val db: SQLiteDatabase) :
 
     fun fetchAllTasksInternal(): List<Task> {
         val projection = arrayOf(BaseColumns._ID, TaskReaderContract.TaskEntry.COLUMN_NAME_TITLE, TaskReaderContract.TaskEntry.COLUMN_COMPLETED, TaskReaderContract.TaskEntry.COLUMN_CREATED_ON)
-        val selection = "${BaseColumns._ID} < ?"
 
         val sortOrder = "${BaseColumns._ID} DESC"
 
-        val cursor = db.query(TaskReaderContract.TaskEntry.TABLE_NAME, projection, selection, null, null, null, sortOrder)
+        val cursor = db.query(TaskReaderContract.TaskEntry.TABLE_NAME, projection, null, null, null, null, sortOrder)
 
         val items = mutableListOf<Task>()
         with(cursor) {
@@ -118,6 +117,19 @@ class TaskSQLiteDataSource @Inject constructor(private val db: SQLiteDatabase) :
     fun addTaskInternal(task: Task): Boolean {
         val newRowId = db.insert(TaskReaderContract.TaskEntry.TABLE_NAME, null, task.toContentValuesForInsert())
         return newRowId != -1L
+    }
+
+    fun bulkAddTaskInternal(tasks: List<Task>): Boolean {
+        db.beginTransaction()
+        try {
+            tasks.forEach {
+                db.insert(TaskReaderContract.TaskEntry.TABLE_NAME, null, it.toContentValuesForInsert())
+            }
+            db.setTransactionSuccessful()
+        } finally {
+            db.endTransaction()
+        }
+        return true
     }
 
     override fun deleteTaskById(id: Int) = flow {
@@ -157,7 +169,6 @@ class TaskSQLiteDataSource @Inject constructor(private val db: SQLiteDatabase) :
 
     private fun Task.toContentValuesForInsert(): ContentValues {
         return ContentValues().apply {
-            put(BaseColumns._ID, id)
             put(TaskReaderContract.TaskEntry.COLUMN_NAME_TITLE, title)
             put(TaskReaderContract.TaskEntry.COLUMN_COMPLETED, completed)
             put(TaskReaderContract.TaskEntry.COLUMN_CREATED_ON, createdOn)

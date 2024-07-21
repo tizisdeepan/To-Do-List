@@ -1,6 +1,7 @@
 package com.sample.app.todolist.todo.data.repository
 
 import androidx.paging.PagingSource
+import com.sample.app.todolist.todo.data.model.DatabasePerformance
 import com.sample.app.todolist.todo.data.model.Task
 import com.sample.app.todolist.todo.data.source.TestPagingSource
 import com.sample.app.todolist.todo.data.source.createPager
@@ -16,12 +17,14 @@ class FakeTaskRepository : ITaskRepository {
     private val flowFetchTasks = MutableStateFlow<Task?>(null)
     private val flowDeleteTaskBoolean = MutableStateFlow(false)
     private val flowUpdateTaskBoolean = MutableStateFlow(false)
+    private val flowCalculateDatabasePerformance = MutableStateFlow(DatabasePerformance())
     suspend fun emitFlowCreateTestTasksBoolean(value: Boolean) = flowCreateTestTasksBoolean.emit(value)
     suspend fun emitFlowClearAllTasksBoolean(value: Boolean) = flowClearAllTasksBoolean.emit(value)
     suspend fun emitFlowAddTaskBoolean(value: Boolean) = flowAddTaskBoolean.emit(value)
     suspend fun emitFlowFetchTask(task: Task) = flowFetchTask.emit(task)
     suspend fun emitFlowDeleteTaskBoolean(value: Boolean) = flowDeleteTaskBoolean.emit(value)
     suspend fun emitFlowUpdateTaskBoolean(value: Boolean) = flowUpdateTaskBoolean.emit(value)
+    suspend fun emitFlowCalculateDatabasePerformance(value: DatabasePerformance) = flowCalculateDatabasePerformance.emit(value)
 
     override fun clearAllTasks(): Flow<Boolean> {
         return flowClearAllTasksBoolean
@@ -49,5 +52,9 @@ class FakeTaskRepository : ITaskRepository {
 
     override fun updateTask(task: Task): Flow<Boolean> {
         return flowUpdateTaskBoolean
+    }
+
+    override fun calculateDBPerformance(): Flow<DatabasePerformance> {
+        return flowCalculateDatabasePerformance
     }
 }

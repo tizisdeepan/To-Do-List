@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentTop="true"
+    android:layout_margin="20dp"
+    android:background="@drawable/dialog_rounded_bg"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="15dp">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/database_performance_analysis"
+        android:textColor="@color/colorPrimary"
+        android:layout_gravity="start"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_gravity="start"
+        android:text="@string/room_database"
+        android:textColor="@color/textColorPrimary"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/room_writes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:textColor="@color/textColorPrimary"
+        android:textSize="14sp"
+        tools:text="@string/writes" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/room_reads"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/textColorPrimary"
+        android:layout_gravity="start"
+        android:textSize="14sp"
+        tools:text="@string/reads" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/room_deletes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:textColor="@color/textColorPrimary"
+        android:textSize="14sp"
+        tools:text="@string/deletes" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_gravity="start"
+        android:text="@string/sqlite_database"
+        android:textColor="@color/textColorPrimary"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/sqlite_writes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:textColor="@color/textColorPrimary"
+        android:textSize="14sp"
+        tools:text="@string/writes" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/sqlite_reads"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:textColor="@color/textColorPrimary"
+        android:textSize="14sp"
+        tools:text="@string/reads" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/sqlite_deletes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/textColorPrimary"
+        android:layout_gravity="start"
+        android:textSize="14sp"
+        tools:text="@string/deletes" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/gotIt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="20dp"
+        android:paddingHorizontal="50dp"
+        android:text="Got it!" />
+
+</LinearLayout>

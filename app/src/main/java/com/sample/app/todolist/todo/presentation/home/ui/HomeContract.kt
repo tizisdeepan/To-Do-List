@@ -7,4 +7,5 @@ interface HomeContract {
     fun navigateToTaskDetailsPage(id: Int)
     fun createTasksForTesting()
     fun clearAllTasks()
+    fun monitorPerformance()
 }

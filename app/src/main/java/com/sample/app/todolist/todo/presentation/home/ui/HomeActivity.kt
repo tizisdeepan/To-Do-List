@@ -1,7 +1,9 @@
 package com.sample.app.todolist.todo.presentation.home.ui
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -12,9 +14,9 @@ import com.sample.app.todolist.todo.presentation.create.ui.CreateTaskFragment
 import com.sample.app.todolist.todo.presentation.details.ui.TaskDetailsFragment
 import com.sample.app.todolist.todo.presentation.home.HomeViewModel
 import com.sample.app.todolist.todo.presentation.list.ui.TaskListFragment
+import com.sample.app.todolist.todo.presentation.ui.PerformanceStatsDialog
 import com.sample.app.todolist.todo.presentation.ui.PleaseWaitDialog
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -41,19 +43,30 @@ class HomeActivity : AppCompatActivity(), HomeContract {
                 R.id.clearEntries -> {
                     clearAllTasks()
                 }
+
+                R.id.monitorPerformance -> {
+                    monitorPerformance()
+                }
             }
             true
         }
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                viewModel.uiState.collectLatest { state ->
+                viewModel.uiState.collect { state ->
                     if (state.isLoading) {
-                        pleaseWaitDialog.show()
+                        if (!pleaseWaitDialog.isShowing) pleaseWaitDialog.show()
+                    } else {
+                        if (pleaseWaitDialog.isShowing) pleaseWaitDialog.dismiss()
                     }
+
                     if (state.areEntriesAdded.consume() == true || state.areEntriesCleared.consume() == true) {
                         pleaseWaitDialog.dismiss()
                         updateTaskList()
+                    }
+
+                    state.databasePerformance?.let { databasePerformance ->
+                        PerformanceStatsDialog(this@HomeActivity, databasePerformance).show()
                     }
                 }
             }
@@ -93,5 +106,14 @@ class HomeActivity : AppCompatActivity(), HomeContract {
 
     override fun clearAllTasks() {
         viewModel.clearAllTasks()
+    }
+
+    override fun monitorPerformance() {
+        AlertDialog.Builder(this).setTitle(resources.getString(R.string.performance_monitoring_alert_title)).setMessage(resources.getString(R.string.performance_monitoring_alert_description)).setPositiveButton(resources.getString(R.string.performance_monitoring_alert_positive)) { dialog, _ ->
+            dialog.dismiss()
+            viewModel.calculateDatabasePerformance()
+        }.setNegativeButton(resources.getString(R.string.performance_monitoring_alert_negative)) { dialog, _ ->
+            dialog.dismiss()
+        }.show()
     }
 }

@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
-class TaskRoomDataSource @Inject constructor(private val db: TaskDatabase) : ITaskDataSource {
+class TaskRoomDataSource @Inject constructor(val db: TaskDatabase) : ITaskDataSource {
     override fun clearAllTasks(): Flow<Boolean> = flow {
         db.taskDao().deleteAllTasks()
         emit(true)

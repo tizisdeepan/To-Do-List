@@ -50,6 +50,6 @@ class HomeViewModelTest {
     fun testCalculateDatabasePerformance() = runTest {
         fakeTaskRepository.emitFlowCalculateDatabasePerformance(DatabasePerformance(room = Stat(10, 12, 1), sqlite = Stat(15, 17, 2)))
         viewModel.calculateDatabasePerformance()
-        assert(viewModel.uiState.value.databasePerformance != null)
+        assert(viewModel.uiState.value.databasePerformance.consume() != null)
     }
 }

@@ -50,7 +50,7 @@ class HomeViewModel @Inject constructor(private val dispatcherProvider: Dispatch
             calculateDatabasePerformanceUseCase().onStart {
                 _uiState.value = _uiState.value.copy(isLoading = true)
             }.collectLatest {
-                _uiState.update { state -> state.copy(isLoading = false, databasePerformance = it) }
+                _uiState.update { state -> state.copy(isLoading = false, databasePerformance = SingleEvent(it)) }
             }
         }
     }

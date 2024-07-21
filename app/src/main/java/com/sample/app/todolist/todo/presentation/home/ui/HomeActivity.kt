@@ -65,7 +65,7 @@ class HomeActivity : AppCompatActivity(), HomeContract {
                         updateTaskList()
                     }
 
-                    state.databasePerformance?.let { databasePerformance ->
+                    state.databasePerformance.consume()?.let { databasePerformance ->
                         PerformanceStatsDialog(this@HomeActivity, databasePerformance).show()
                     }
                 }

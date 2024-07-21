@@ -3,7 +3,6 @@ package com.sample.app.todolist.todo.domain
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.sample.app.todolist.todo.data.model.Task
-import com.sample.app.todolist.todo.data.repository.CurrentCacheStrategy
 import com.sample.app.todolist.todo.data.repository.ITaskRepository
 import javax.inject.Inject
 

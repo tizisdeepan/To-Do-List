@@ -1,6 +1,8 @@
 package com.sample.app.todolist.todo.data.repository
 
 import androidx.paging.PagingSource
+import com.sample.app.todolist.todo.data.database.CurrentCacheStrategy
+import com.sample.app.todolist.todo.data.database.DatabaseStrategy
 import com.sample.app.todolist.todo.data.model.Task
 import com.sample.app.todolist.todo.data.source.ITaskDataSource
 import com.sample.app.todolist.todo.di.RoomDatabaseSource
@@ -8,7 +10,7 @@ import com.sample.app.todolist.todo.di.SQLiteDatabaseSource
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class TaskRepository @Inject constructor(@SQLiteDatabaseSource val sqliteDatabase: ITaskDataSource, @RoomDatabaseSource val roomDatabase: ITaskDataSource) : ITaskRepository {
+class TaskRepository @Inject constructor(@SQLiteDatabaseSource private val sqliteDatabase: ITaskDataSource, @RoomDatabaseSource private val roomDatabase: ITaskDataSource) : ITaskRepository {
     override fun clearAllTasks(): Flow<Boolean> {
         return when (CurrentCacheStrategy.strategy) {
             DatabaseStrategy.SQLITE -> {
@@ -24,11 +26,11 @@ class TaskRepository @Inject constructor(@SQLiteDatabaseSource val sqliteDatabas
     override fun createTestTasks(): Flow<Boolean> {
         return when (CurrentCacheStrategy.strategy) {
             DatabaseStrategy.SQLITE -> {
-                sqliteDatabase.createTestTasks()
+                sqliteDatabase.addTasksForTesting()
             }
 
             DatabaseStrategy.ROOM -> {
-                roomDatabase.createTestTasks()
+                roomDatabase.addTasksForTesting()
             }
         }
     }
@@ -48,11 +50,11 @@ class TaskRepository @Inject constructor(@SQLiteDatabaseSource val sqliteDatabas
     override fun fetchTask(id: Int): Flow<Task?> {
         return when (CurrentCacheStrategy.strategy) {
             DatabaseStrategy.SQLITE -> {
-                sqliteDatabase.fetchTask(id)
+                sqliteDatabase.fetchTaskById(id)
             }
 
             DatabaseStrategy.ROOM -> {
-                roomDatabase.fetchTask(id)
+                roomDatabase.fetchTaskById(id)
             }
         }
     }
@@ -72,11 +74,11 @@ class TaskRepository @Inject constructor(@SQLiteDatabaseSource val sqliteDatabas
     override fun deleteTask(id: Int): Flow<Boolean> {
         return when (CurrentCacheStrategy.strategy) {
             DatabaseStrategy.SQLITE -> {
-                sqliteDatabase.deleteTask(id)
+                sqliteDatabase.deleteTaskById(id)
             }
 
             DatabaseStrategy.ROOM -> {
-                roomDatabase.deleteTask(id)
+                roomDatabase.deleteTaskById(id)
             }
         }
     }

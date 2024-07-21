@@ -6,10 +6,10 @@ import kotlinx.coroutines.flow.Flow
 
 interface ITaskDataSource {
     fun clearAllTasks(): Flow<Boolean>
-    fun createTestTasks(): Flow<Boolean>
+    fun addTasksForTesting(): Flow<Boolean>
     fun fetchTasks(): PagingSource<Int, Task>
-    fun fetchTask(id: Int): Flow<Task?>
+    fun fetchTaskById(id: Int): Flow<Task?>
     fun addTask(title: String): Flow<Boolean>
-    fun deleteTask(id: Int): Flow<Boolean>
+    fun deleteTaskById(id: Int): Flow<Boolean>
     fun updateTask(task: Task): Flow<Boolean>
 }

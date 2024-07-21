@@ -10,13 +10,13 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
-class TaskRoomDataSource @Inject constructor(val db: TaskDatabase) : ITaskDataSource {
+class TaskRoomDataSource @Inject constructor(private val db: TaskDatabase) : ITaskDataSource {
     override fun clearAllTasks(): Flow<Boolean> = flow {
         db.taskDao().deleteAllTasks()
         emit(true)
     }.flowOn(Dispatchers.IO)
 
-    override fun createTestTasks(): Flow<Boolean> = flow {
+    override fun addTasksForTesting(): Flow<Boolean> = flow {
         val count = db.taskDao().getCount().toLong() + 1
         val tasks: ArrayList<Task> = ArrayList()
         for (i in count..(count + 1999)) {
@@ -34,7 +34,7 @@ class TaskRoomDataSource @Inject constructor(val db: TaskDatabase) : ITaskDataSo
         return db.taskDao().getPaginatedTasks()
     }
 
-    override fun fetchTask(id: Int): Flow<Task?> = flow {
+    override fun fetchTaskById(id: Int): Flow<Task?> = flow {
         emit(db.taskDao().getTask(id))
     }.flowOn(Dispatchers.IO)
 
@@ -43,7 +43,7 @@ class TaskRoomDataSource @Inject constructor(val db: TaskDatabase) : ITaskDataSo
         emit(true)
     }.flowOn(Dispatchers.IO)
 
-    override fun deleteTask(id: Int): Flow<Boolean> = flow {
+    override fun deleteTaskById(id: Int): Flow<Boolean> = flow {
         db.taskDao().deleteTask(id)
         emit(true)
     }.flowOn(Dispatchers.IO)

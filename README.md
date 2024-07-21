@@ -102,7 +102,7 @@ We are using Paging 3 for handling cache reads. Pagination is far more efficient
 3. Turbine: Testing Kotlin flows
 4. Paging-testing: For testing Paging Data, specifically to convert paging source to snapshot list for assertions
 
-## Coverage
+### Coverage
 1. 33% Classes covered
 2. 17% Lines covered
 
@@ -113,5 +113,6 @@ We are using Paging 3 for handling cache reads. Pagination is far more efficient
 
 # Low Level Design
 ![](https://github.com/tizisdeepan/To-Do-List/blob/523fd6aa1e5d080e4e9a2f374eb9ae9751f72943/read_me_resources/low_level_diagram.png)
+
 
 Please contact me via tizisdeepan@gmail.com if you have any questions

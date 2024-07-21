@@ -7,6 +7,11 @@ The Simple To-Do List App is an Android application designed to help users effic
 4. User Interface: A clean, simple, and responsive UI allows users to interact with the to-do list effortlessly, even with a large number of items. App is designed using Material Design 3 components library.
 5. Testing: Includes unit tests for Business logics in ViewModel and Domain layer use cases with 100% coverage and SQLite / Room database operations Android inregration tests to ensure reliability and correctness.
 
+# App Screenshots
+| Home  | Creation | Details | Test Options |
+| ------------- | ------------- | ------------- | ------------- |
+| ![](https://github.com/tizisdeepan/To-Do-List/blob/513389e3adefc5a7ccbf8649517406c5bf0ef18c/read_me_resources/main_page.png) | ![](https://github.com/tizisdeepan/To-Do-List/blob/513389e3adefc5a7ccbf8649517406c5bf0ef18c/read_me_resources/creation_page.png) | ![](https://github.com/tizisdeepan/To-Do-List/blob/513389e3adefc5a7ccbf8649517406c5bf0ef18c/read_me_resources/details_page.png) | ![](https://github.com/tizisdeepan/To-Do-List/blob/1c1268ac07451f58e7047568f682349d04bdd093/read_me_resources/options.png) |
+
 # Installation
 1. Clone the repository
    ```git clone https://github.com/tizisdeepan/To-Do-List.git```
@@ -27,7 +32,7 @@ Here are some useful Gradle/adb commands for executing this example:
 5. Ability to scroll through the list of tasks smoothly without any UI janks
 6. Ability to go to the top of a page if you are in the middle or end of the list - this can alternatively be used to stress test the RecyclerView load performance
 7. Ability to open the Task details page on tapping a task
-8. Ability to choose between Room and SQLite databases using the toggle at the top of the page
+8. Ability to choose between Room and SQLite databases using the toggle at the top of the listing page
 
 ### Task Creation Page
 1. Ability to enter the title for the task to be created
@@ -43,11 +48,6 @@ Available in the main page with 3 important features for testing and benchmarkin
 1. Create 2000 tasks: Creates 2000 tasks in the current configured database table
 2. Clear all tasks: Clears all tasks from the current configured database table
 3. Monitor Performance: Displays benchmark data for database operations on both Room and SQLite databases
-
-# App Screenshots
-| Home  | Creation | Details | Test Options |
-| ------------- | ------------- | ------------- | ------------- |
-| ![](https://github.com/tizisdeepan/To-Do-List/blob/513389e3adefc5a7ccbf8649517406c5bf0ef18c/read_me_resources/main_page.png) | ![](https://github.com/tizisdeepan/To-Do-List/blob/513389e3adefc5a7ccbf8649517406c5bf0ef18c/read_me_resources/creation_page.png) | ![](https://github.com/tizisdeepan/To-Do-List/blob/513389e3adefc5a7ccbf8649517406c5bf0ef18c/read_me_resources/details_page.png) | ![](https://github.com/tizisdeepan/To-Do-List/blob/513389e3adefc5a7ccbf8649517406c5bf0ef18c/read_me_resources/options.png) |
 
 # High Level Design
 ![](https://github.com/tizisdeepan/To-Do-List/blob/513389e3adefc5a7ccbf8649517406c5bf0ef18c/read_me_resources/high_level_diagram.png)
@@ -71,6 +71,14 @@ Room is a wrapper, written on top of SQLite and is recommended by Google. Each d
 |Reads|8 ms|11 ms|
 |Writes|45 ms|63 ms|
 |Deletes|1 ms|3 ms|
+
+In addition to being faster than SQLite operations, Room also offers reactive data flow directly from the data source to the ViewModels. This means that, Room can act as the Single Source Of Truth much more efficiently and changes are reflected on the UI through reactive programming via Kotlin Flows eliminating the need for a mediator
+
+## Scrolling Performance
+The project demonstrates several ways to improve the scroll performance in RecyclerView
+1. PagingAdapter: The RecyclerView adapter under Paging3 library is packed with features that allows us to manage pages of data (TaskListAdapter)
+2. DiffUtil: Asynchronous difference calculation between large datasets and withoug having to notify the changes to the RecyclerView manually (TaskDiffUtil)
+3. UI Model: The Task data from the data source is then converted into a TaskUI model in the ViewModel layer to eliminate doing heavy work in the onBindViewHolder methods which drastically improves the RecyclerView scroll performance
 
 ## Paging 3
 We are using Paging 3 for handling cache reads. Pagination is far more efficient than loading data as a whole from database when it comes to large amount of data.

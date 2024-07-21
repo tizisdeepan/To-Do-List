@@ -1,4 +1,4 @@
-# To-Do-List
+# Simple To-Do List
 The Simple To-Do List App is an Android application designed to help users efficiently manage their tasks. With a focus on utilizing SQLite and Room for local data storage, the app ensures a seamless experience through basic CRUD (Create, Read, Update, Delete) operations. Key features include:
 
 1. Main Screen: Displays a list of to-do items, each with a title and a timestamp indicating when it was created. Users can easily add and delete items as needed.
@@ -23,8 +23,17 @@ Model-View-ViewModel (MVVM) is an architectural pattern that separates the devel
 3. ViewModel: Acts as a mediator between the View and the Model. It holds and processes the data required by the View, manages UI-related data in a lifecycle-conscious way, and handles the business logic. The ViewModel exposes data as observable LiveData or other observable types, allowing the View to react to changes automatically.
 
 ## Data Flow
-1. Asynchronous Programming: Kotlin Coroutines
+1. Asynchronous Programming: Kotlin Coroutines (Structured Concurrency)
 2. Reactive Programming: Kotlin Flows
+
+## Database
+### Room vs SQLite
+Room is a wrapper, written on top of SQLite and is recommended by Google. Each database operation was performed for 2000 records over 10 times and the average was calculated. It can be observed that Room slightly performs better than SQLite.
+| Operation | Room | SQLite |
+| ------------- | ------------- | ------------- |
+|Reads|8 ms|11 ms|
+|Writes|60 ms|69 ms|
+|Deletes|8 ms|2 ms|
 
 ## Paging 3
 We are using Paging 3 for handling cache reads. Pagination is far more efficient than loading data as a whole from database when it comes to large amount of data.
@@ -56,6 +65,14 @@ We are using Paging 3 for handling cache reads. Pagination is far more efficient
 3. Turbine: Testing Kotlin flows
 4. Paging-testing: For testing Paging Data, specifically to convert paging source to snapshot list for assertions
 
+## Coverage
+1. 33% Classes covered
+2. 17% Lines covered
+
+
+| Local Unit Tests  | Android Integration Tests |
+| ------------- | ------------- |
+|![](https://github.com/tizisdeepan/To-Do-List/blob/739a9666344bd2084d3b9e3b2b170164af8ba6d3/read_me_resources/unit_tests.png)|![](https://github.com/tizisdeepan/To-Do-List/blob/739a9666344bd2084d3b9e3b2b170164af8ba6d3/read_me_resources/integration_tests.png)|
 
 # Low Level Design
-![](https://github.com/tizisdeepan/To-Do-List/blob/1557c034b27d31b6721ef626a4c40c248026153f/read_me_resources/low_level_diagram.png)
+![](https://github.com/tizisdeepan/To-Do-List/blob/523fd6aa1e5d080e4e9a2f374eb9ae9751f72943/read_me_resources/low_level_diagram.png)

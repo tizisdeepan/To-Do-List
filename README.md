@@ -87,6 +87,7 @@ We are using Paging 3 for handling cache reads. Pagination is far more efficient
 5. CreateTaskUseCase: Creates a single Task for a given task title in either SQLite database or Room database depending on the current Database Strategy
 6. ClearAllTasksUseCase: For testing purposes, clears all the cached tasks from either SQLite database or Room database depending on the current Database Strategy
 7. CreateTasksForTestingUseCase: For testing purposes, creates 2000 tasks in either SQLite database or Room database depending on the current Database Strategy
+8. CalculateDatabasePerformanceUseCase: Used for benchmarking database operations
 
 ## Repository
 1. Task Repository: Acts as a controller that decides on what caching strategy to used based on the CurrentDatabasStrategy.kt object value

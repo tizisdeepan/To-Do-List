@@ -1,7 +1,6 @@
 package com.sample.app.todolist.todo.presentation.home.ui
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity

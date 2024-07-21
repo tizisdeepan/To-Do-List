@@ -26,14 +26,22 @@ Model-View-ViewModel (MVVM) is an architectural pattern that separates the devel
 1. Asynchronous Programming: Kotlin Coroutines
 2. Reactive Programming: Kotlin Flows
 
+## Paging 3
+We are using Paging 3 for handling cache reads. Pagination is far more efficient than loading data as a whole from database when it comes to large amount of data.
+### TaskPagingSource - Paging Keys
+1. Load Size: 100 items per page
+2. Page Key: Task ID (auto generated primary key), performance is more efficient than createdOn for our usecase and preserves insertion order when bulk insertion in Room
+3. Previous Key, Next Key: Page keys to go backward and forward, and to calculate the Refresh Key
+4. Refresh Key: To identify where the user is in the RecyclerView, this is calculated based on the Page's anchor position
+
 ## Domain Layer
 1. FetchTasksUseCase: Fetches paginated Tasks from either SQLite database or Room database depending on the current Database Strategy
-2. FetchTaskUseCase: Fetches a single Task for a given task ID from either SQLite database or Room database depending on the current Database Strategy
+2. FetchTaskByIdUseCase: Fetches a single Task for a given task ID from either SQLite database or Room database depending on the current Database Strategy
 3. UpdateTaskUseCase: Updates the given Task with new changes on either SQLite database or Room database depending on the current Database Strategy
-4. DeleteTaskUseCase: Deletes a single Task for a given task ID from either SQLite database or Room database depending on the current Database Strategy
+4. DeleteTaskByIdUseCase: Deletes a single Task for a given task ID from either SQLite database or Room database depending on the current Database Strategy
 5. CreateTaskUseCase: Creates a single Task for a given task title in either SQLite database or Room database depending on the current Database Strategy
 6. ClearAllTasksUseCase: For testing purposes, clears all the cached tasks from either SQLite database or Room database depending on the current Database Strategy
-7. CreateTestTasksUseCase: For testing purposes, creates 2000 tasks in either SQLite database or Room database depending on the current Database Strategy
+7. CreateTasksForTestingUseCase: For testing purposes, creates 2000 tasks in either SQLite database or Room database depending on the current Database Strategy
 
 ## Repository
 1. Task Repository: Acts as a controller that decides on what caching strategy to used based on the CurrentDatabasStrategy.kt object value

@@ -7,6 +7,42 @@ The Simple To-Do List App is an Android application designed to help users effic
 4. User Interface: A clean, simple, and responsive UI allows users to interact with the to-do list effortlessly, even with a large number of items. App is designed using Material Design 3 components library.
 5. Testing: Includes unit tests for Business logics in ViewModel and Domain layer use cases with 100% coverage and SQLite / Room database operations Android inregration tests to ensure reliability and correctness.
 
+# Installation
+1. Clone the repository
+2. Open the build.gradle from the cloned folder via Android Studio
+3. Connect your test device or run the build in an emulator
+
+Here are some useful Gradle/adb commands for executing this example:
+1. `./gradlew clean build` - Build the entire example and execute unit and integration tests plus lint check.
+2. `./gradlew installDebug` - Install the debug apk on the current connected device.
+3. `./gradlew runUnitTests` - Execute domain and data layer tests (both unit and integration).
+
+# Features
+## Home Page
+1. Task List: List all tasks in a paginated manner to reduce load on the IO thread
+2. Ability to mark a task as Completed by checking the Checkbox
+3. Ability to open the Task creation page
+4. Ability to view the test options from the more menu on the home page toolbar
+5. Ability to scroll through the list of tasks smoothly without any UI janks
+6. Ability to go to the top of a page if you are in the middle or end of the list - this can alternatively be used to stress test the RecyclerView load performance
+7. Ability to open the Task details page on tapping a task
+8. Ability to choose between Room and SQLite databases using the toggle at the top of the page
+
+## Task Creation Page
+1. Ability to enter the title for the task to be created
+2. Ability to create a task
+
+## Task Details Page
+1. Ability to view the title of the task
+2. Ability to mark the task as Completed by checking the Checkbox
+3. Ability to delete the task
+
+## Test Options Menu
+Available in the main page with 3 important features for testing and benchmarking the app,
+1. Create 2000 tasks: Creates 2000 tasks in the current configured database table
+2. Clear all tasks: Clears all tasks from the current configured database table
+3. Monitor Performance: Displays benchmark data for database operations on both Room and SQLite databases
+
 # App Screenshots
 | Home  | Creation | Details | Test Options |
 | ------------- | ------------- | ------------- | ------------- |
@@ -76,3 +112,5 @@ We are using Paging 3 for handling cache reads. Pagination is far more efficient
 
 # Low Level Design
 ![](https://github.com/tizisdeepan/To-Do-List/blob/523fd6aa1e5d080e4e9a2f374eb9ae9751f72943/read_me_resources/low_level_diagram.png)
+
+Please contact me via tizisdeepan@gmail.com if you have any questions

@@ -9,6 +9,7 @@ The Simple To-Do List App is an Android application designed to help users effic
 
 # Installation
 1. Clone the repository
+   ```git clone https://github.com/tizisdeepan/To-Do-List.git```
 2. Open the build.gradle from the cloned folder via Android Studio
 3. Connect your test device or run the build in an emulator
 
@@ -18,7 +19,7 @@ Here are some useful Gradle/adb commands for executing this example:
 3. `./gradlew runUnitTests` - Execute domain and data layer tests (both unit and integration).
 
 # Features
-## Home Page
+### Home Page
 1. Task List: List all tasks in a paginated manner to reduce load on the IO thread
 2. Ability to mark a task as Completed by checking the Checkbox
 3. Ability to open the Task creation page
@@ -28,16 +29,16 @@ Here are some useful Gradle/adb commands for executing this example:
 7. Ability to open the Task details page on tapping a task
 8. Ability to choose between Room and SQLite databases using the toggle at the top of the page
 
-## Task Creation Page
+### Task Creation Page
 1. Ability to enter the title for the task to be created
 2. Ability to create a task
 
-## Task Details Page
+### Task Details Page
 1. Ability to view the title of the task
 2. Ability to mark the task as Completed by checking the Checkbox
 3. Ability to delete the task
 
-## Test Options Menu
+### Test Options Menu
 Available in the main page with 3 important features for testing and benchmarking the app,
 1. Create 2000 tasks: Creates 2000 tasks in the current configured database table
 2. Clear all tasks: Clears all tasks from the current configured database table
@@ -52,7 +53,7 @@ Available in the main page with 3 important features for testing and benchmarkin
 ![](https://github.com/tizisdeepan/To-Do-List/blob/513389e3adefc5a7ccbf8649517406c5bf0ef18c/read_me_resources/high_level_diagram.png)
 
 ## Architecture
-Model-View-ViewModel (MVVM) is an architectural pattern that separates the development of the graphical user interface (the view) from the business logic or back-end logic (the model) by introducing an intermediate component called the ViewModel.
+Model-View-ViewModel (MVVM) is an architectural pattern that separates the development of the graphical user interface (the view) from the business logic (the model) by introducing an intermediate component called the ViewModel.
 
 1. Model: Represents the data and business logic of the application. It handles the data operations, such as fetching data from a database or a network, and provides a clean API for the ViewModel to interact with.
 2. View: The UI layer, which displays the data and reacts to user interactions. It observes the ViewModel for data changes and updates the UI accordingly. The View should ideally contain no business logic.
@@ -68,8 +69,8 @@ Room is a wrapper, written on top of SQLite and is recommended by Google. Each d
 | Operation | Room | SQLite |
 | ------------- | ------------- | ------------- |
 |Reads|8 ms|11 ms|
-|Writes|60 ms|69 ms|
-|Deletes|8 ms|2 ms|
+|Writes|45 ms|63 ms|
+|Deletes|1 ms|3 ms|
 
 ## Paging 3
 We are using Paging 3 for handling cache reads. Pagination is far more efficient than loading data as a whole from database when it comes to large amount of data.
@@ -106,13 +107,20 @@ We are using Paging 3 for handling cache reads. Pagination is far more efficient
 1. 33% Classes covered
 2. 17% Lines covered
 
-
 | Local Unit Tests  | Android Integration Tests |
 | ------------- | ------------- |
 |![](https://github.com/tizisdeepan/To-Do-List/blob/739a9666344bd2084d3b9e3b2b170164af8ba6d3/read_me_resources/unit_tests.png)|![](https://github.com/tizisdeepan/To-Do-List/blob/739a9666344bd2084d3b9e3b2b170164af8ba6d3/read_me_resources/integration_tests.png)|
 
 # Low Level Design
 ![](https://github.com/tizisdeepan/To-Do-List/blob/523fd6aa1e5d080e4e9a2f374eb9ae9751f72943/read_me_resources/low_level_diagram.png)
+
+# Continuous Integration
+CI is achieved with the help of Github actions for this project,
+1. Run Unit Tests
+2. Generate Debug APK
+3. Publish Debug APK as an artifact
+
+![](https://github.com/tizisdeepan/To-Do-List/blob/23ac1911ae61dd9ad87ce4254a98cd86a58b1e5f/read_me_resources/actions.png)
 
 
 Please contact me via tizisdeepan@gmail.com if you have any questions

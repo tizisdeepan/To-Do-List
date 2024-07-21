@@ -6,6 +6,8 @@
     android:layout_alignParentTop="true"
     android:layout_margin="20dp"
     android:background="@drawable/dialog_rounded_bg"
+    android:clickable="true"
+    android:focusable="true"
     android:gravity="center"
     android:orientation="vertical"
     android:padding="15dp">
@@ -13,18 +15,18 @@
     <com.google.android.material.textview.MaterialTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="start"
         android:text="@string/database_performance_analysis"
         android:textColor="@color/colorPrimary"
-        android:layout_gravity="start"
         android:textSize="20sp"
         android:textStyle="bold" />
 
     <com.google.android.material.textview.MaterialTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="start"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="5dp"
-        android:layout_gravity="start"
         android:text="@string/room_database"
         android:textColor="@color/textColorPrimary"
         android:textSize="16sp"
@@ -43,8 +45,8 @@
         android:id="@+id/room_reads"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/textColorPrimary"
         android:layout_gravity="start"
+        android:textColor="@color/textColorPrimary"
         android:textSize="14sp"
         tools:text="@string/reads" />
 
@@ -60,9 +62,9 @@
     <com.google.android.material.textview.MaterialTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="start"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="5dp"
-        android:layout_gravity="start"
         android:text="@string/sqlite_database"
         android:textColor="@color/textColorPrimary"
         android:textSize="16sp"
@@ -90,8 +92,8 @@
         android:id="@+id/sqlite_deletes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/textColorPrimary"
         android:layout_gravity="start"
+        android:textColor="@color/textColorPrimary"
         android:textSize="14sp"
         tools:text="@string/deletes" />
 

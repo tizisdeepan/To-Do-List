@@ -9,11 +9,11 @@
     <string name="clear_all_entries">Clear all tasks</string>
     <string name="monitor_performance">Monitor Performance</string>
     <string name="please_wait">Please Wait</string>
-    <string name="use_room_for_caching">Use Room for Caching</string>
+    <string name="use_room_for_caching">Use Room database for Caching</string>
     <string name="go_to_top">Go to top</string>
     <string name="performance_monitoring_alert_title">Calculate DB Performance</string>
     <string name="performance_monitoring_alert_description">DB Performance monitoring is done over 10 iterations on heavy write, read and delete database operations. \n\nThis will take a while to complete, are you sure you want to proceed?</string>
-    <string name="performance_monitoring_alert_positive">Ok</string>
+    <string name="performance_monitoring_alert_positive">OK</string>
     <string name="performance_monitoring_alert_negative">Cancel</string>
     <string name="database_performance_analysis">Database Performance Analysis</string>
     <string name="room_database">Room Database</string>

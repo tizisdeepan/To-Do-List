@@ -64,7 +64,7 @@ Model-View-ViewModel (MVVM) is an architectural pattern that separates the devel
 2. Reactive Programming: Kotlin Flows
 
 ## Database
-### Room vs SQLite
+### Room vs SQLite - Google Pixel 4a
 Room is a wrapper, written on top of SQLite and is recommended by Google. Each database operation was performed for 2000 records over 10 times and the average was calculated. It can be observed that Room slightly performs better than SQLite.
 | Operation | Room | SQLite |
 | ------------- | ------------- | ------------- |
